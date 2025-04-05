@@ -1,0 +1,236 @@
+<%@page import="java.sql.Connection, java.sql.SQLException"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page import="java.sql.*" %>
+<%@page import="org.mis.ConnectionProvider" %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link rel="icon" href="/coffeeshop/image/logo.png">
+
+    <link href='https://css.gg/check-o.css' rel='stylesheet'>
+    <link href='https://css.gg/close-o.css' rel='stylesheet'>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        section {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            padding: 50px 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #D0B49F;
+            flex-direction: column;
+        }
+
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 40px 100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header .logo {
+            position: relative;
+            max-width: 150px;
+            color: brown;
+            font-size: 32px;
+            font-weight: 550;
+            text-decoration: none;
+        }
+
+        header ul {
+            position: relative;
+            display: flex;
+        }
+
+        header ul li {
+            list-style: none;
+        }
+
+        header ul li a {
+            display: inline-block;
+            color: #333;
+            font-weight: 400;
+            margin-left: 60px;
+            text-decoration: none;
+            color: #2F435A;
+        }
+
+        header ul li a:hover {
+            background: #AB6B51;
+            padding: 10px;
+            border-radius: 5%;
+        }
+
+        .container {
+            padding: 2px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container h2 {
+            font-size: 36px;
+            font-weight: 500;
+            color: #2F435A;
+            position: relative;
+        }
+
+        .container .table {
+            margin-top: 10%;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container .table table {
+            position: relative;
+            margin-top: 5%;
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .container .table table td,
+        .container .table table th {
+            border: 1px solid #2F435A;
+            padding: 8px;
+            min-width: 150px;
+        }
+
+        .container .table table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #AB6B51;
+            color: #2F435A;
+        }
+
+        a:active {
+            color: #AB6B51;
+        }
+
+        .btn {
+            padding: 5px;
+            font-size: 18px;
+            background-color: chocolate;
+            font-weight: 550;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 991px) {
+            .container {
+                min-width: 40%;
+            }
+
+            .container .table {
+                min-width: 60%;
+            }
+
+            .container .add-form table {
+                min-width: 60%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <header>
+            <a href="#" class="logo">BiblioCafe</a>
+            <ul>
+            	<li><a href="index.jsp">Home</a></li>
+                <li><a href="userdashboard.jsp">User Dashboard</a></li>
+           
+                <li><a href="logout.jsp">Log out</a></li>
+            </ul>
+        </header>
+        <div class="container">
+            <h2>Cart</h2>
+            <div class="table">
+                <table>
+                    <tr>
+                        <th>Product Id</th>
+                     
+                        <th>Product Name</th>
+                        
+                        <th>Price</th>
+                       
+                    </tr>
+                    <% 
+String ProductId = null;
+String ProductName=null;
+
+double Price=0;
+Connection conn = null;
+PreparedStatement pstm = null;
+ResultSet rs = null;
+try {
+conn= ConnectionProvider.createC();
+pstm = conn.prepareStatement("select * from cart");
+rs = pstm.executeQuery();
+
+while (rs.next()) {
+ProductId=rs.getString(1);
+ProductName=rs.getString(2);
+Price=rs.getDouble(3);
+
+out.println("<tr>");
+
+
+out.println("<td>");
+out.println(ProductId);
+out.println("</td>");
+
+out.println("<td>");
+out.println(ProductName);
+out.println("</td>");
+
+out.println("<td>");
+out.println(Price);
+out.println("</td>");
+
+
+
+out.println("<td>");
+out.println("<input type='submit' value='Update' class='btn btn-danger'> ");
+
+out.println("</td>");
+out.println("<td>");
+out.println("<input type='submit' value='Delete' class='btn btn-danger'> ");
+
+out.println("</td>");
+out.println("</tr>");
+}
+
+} catch (Exception e) {}
+%>
+
+                    
+                    </table>
+                </div>
+            </div>
+            <a class="nav-link" href="orderPlaced.jsp"><button type="button" class="btn btn-outline-secondary">Place Order</button></a>  
+        </section>
+    </body>
+</html>
